@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>餐桌电影放映机 | 温暖你的每一餐</title>
+    <!-- 引入 Tailwind CSS 用于优雅的响应式 UI 设计 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google 字体提升排版高级感 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #FAF6F0; /* 极简奶油色背景 */
+        }
+        /* 隐藏滚动条但保持滚动 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-6 text-stone-800">
+
+    <div class="w-full max-w-md bg-white/90 backdrop-blur-md rounded-3xl shadow-xl shadow-stone-200/50 p-6 border border-orange-100/50 flex flex-col justify-between">
+        
+        <!-- 头部 Header -->
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-[#D35A33] tracking-wide flex items-center justify-center gap-2">
+                <span>🍽️</span> 餐桌电影放映机
+            </h1>
+            <p class="text-xs text-stone-400 mt-1">今天吃什么，今晚看什么</p>
+        </div>
+
+        <!-- 交互表单 -->
+        <div class="space-y-5">
+            <!-- 1. 今日菜单 -->
+            <div>
+                <label class="block text-xs font-medium text-[#D35A33]/80 mb-2 tracking-wider">今日菜单 (Today's Menu)</label>
+                <div class="relative">
+                    <input type="text" id="foodInput" placeholder="✍️ 正在吃什么？（例如：螺蛳粉、小龙虾、冰西瓜）" 
+                        class="w-full bg-[#FCFAF7] border border-orange-100/70 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#E27043]/30 focus:border-[#E27043] transition-all placeholder-stone-300">
+                </div>
+            </div>
+
+            <!-- 2. 用餐人数 -->
+            <div>
+                <label class="block text-xs font-medium text-[#D35A33]/80 mb-2 tracking-wider">用餐人数 (Diners)</label>
+                <div class="grid grid-cols-3 gap-2" id="cohortGroup">
+                    <button onclick="selectOption('cohort', this)" data-value="1" class="active-cohort py-2.5 rounded-xl text-xs font-medium bg-[#E27043] text-white transition-all shadow-sm shadow-[#E27043]/20">1人独享</button>
+                    <button onclick="selectOption('cohort', this)" data-value="2" class="py-2.5 rounded-xl text-xs font-medium bg-[#FCFAF7] border border-orange-100/50 text-stone-500 hover:bg-orange-50/30 transition-all">2人世界</button>
+                    <button onclick="selectOption('cohort', this)" data-value="3" class="py-2.5 rounded-xl text-xs font-medium bg-[#FCFAF7] border border-orange-100/50 text-stone-500 hover:bg-orange-50/30 transition-all">聚会搭子</button>
+                </div>
+            </div>
+
+            <!-- 3. 想要氛围 -->
+            <div>
+                <label class="block text-xs font-medium text-[#D35A33]/80 mb-2 tracking-wider">想要氛围 (Vibe)</label>
+                <div class="grid grid-cols-4 gap-1.5" id="vibeGroup">
+                    <button onclick="selectOption('vibe', this)" data-value="heal" class="active-vibe py-2 rounded-lg text-[11px] font-medium bg-[#E27043] text-white transition-all">温馨治愈</button>
+                    <button onclick="selectOption('vibe', this)" data-value="laugh" class="py-2 rounded-lg text-[11px] font-medium bg-[#FCFAF7] border border-orange-100/50 text-stone-500 hover:bg-orange-50/30 transition-all">疯狂大笑</button>
+                    <button onclick="selectOption('vibe', this)" data-value="thrill" class="py-2 rounded-lg text-[11px] font-medium bg-[#FCFAF7] border border-orange-100/50 text-stone-500 hover:bg-orange-50/30 transition-all">解压爽快</button>
+                    <button onclick="selectOption('vibe', this)" data-value="brain" class="py-2 rounded-lg text-[11px] font-medium bg-[#FCFAF7] border border-orange-100/50 text-stone-500 hover:bg-orange-50/30 transition-all">脑洞悬疑</button>
+                </div>
+            </div>
+
+            <!-- 4. 内容类型 -->
+            <div>
+                <label class="block text-xs font-medium text-[#D35A33]/80 mb-2 tracking-wider">内容类型 (Media Type)</label>
+                <div class="grid grid-cols-4 gap-1.5" id="mediaGroup">
+                    <button onclick="selectOption('media', this)" data-value="movie" class="active-media py-2 rounded-lg text-[11px] font-medium bg-[#E27043] text-white transition-all">电影</button>
+                    <button onclick="selectOption('media', this)" data-value="show" class="py-2 rounded-lg text-[11px] font-medium bg-[#FCFAF7] border border-orange-100/50 text-stone-500 hover:bg-orange-50/30 transition-all">剧集/综艺</button>
+                    <button onclick="selectOption('media', this)" data-value="skit" class="py-2 rounded-lg text-[11px] font-medium bg-[#FCFAF7] border border-orange-100/50 text-stone-500 hover:bg-orange-50/30 transition-all">小品/相声</button>
+                    <button onclick="selectOption('media', this)" data-value="short" class="py-2 rounded-lg text-[11px] font-medium bg-[#FCFAF7] border border-orange-100/50 text-stone-500 hover:bg-orange-50/30 transition-all">短视频</button>
+                </div>
+            </div>
+
+            <!-- 5. 匹配按钮 -->
+            <button onclick="generateMatch()" class="w-full bg-[#E27043] hover:bg-[#D35A33] text-white py-3.5 rounded-2xl font-medium text-sm tracking-widest shadow-md shadow-[#E27043]/30 active:scale-[0.98] transition-all mt-4">
+                🍳 匹配我的下饭伴侣！
+            </button>
+        </div>
+
+        <!-- 结果展示区域 (默认隐藏) -->
+        <div id="resultCard" class="hidden mt-6 bg-[#FDF8F3] border border-orange-100/70 rounded-2xl p-4 transition-all duration-500 scale-95 opacity-0">
+            <div class="flex gap-4">
+                <!-- 占位海报/图标 -->
+                <div class="w-20 h-28 bg-[#F5EBE1] rounded-lg flex-shrink-0 flex flex-col items-center justify-center border border-orange-100/50">
+                    <span class="text-3xl" id="resultEmoji">🎬</span>
+                    <span class="text-[9px] text-stone-400 mt-2 tracking-wider" id="resultFormat">MOVIE</span>
+                </div>
+                <!-- 推荐内容 -->
+                <div class="flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <h3 id="resultTitle" class="text-base font-bold text-stone-800 leading-tight">深夜食堂</h3>
+                            <span id="resultPlatform" class="text-[10px] px-2 py-0.5 bg-orange-100/50 text-[#D35A33] rounded-full font-medium">Bilibili</span>
+                        </div>
+                        <p id="resultDesc" class="text-xs text-stone-400 mt-1.5 leading-relaxed">一间深夜营业的小食堂里，每一个故事都温热了食客疲惫的灵魂。</p>
+                    </div>
+                    <!-- 佐餐理由 -->
+                    <div class="mt-2 bg-white/70 rounded-xl p-2.5 border border-orange-50/50">
+                        <p class="text-[10px] font-bold text-[#D35A33]">🧪 佐餐化学反应：</p>
+                        <p id="resultReason" class="text-[10px] text-stone-500 mt-0.5 leading-normal">因为你在吃热腾腾的食物，这部剧的慢节奏和美食特写，能让你的身心一起暖起来。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 当前选择的数据状态
+        let currentSelections = {
+            cohort: "1",
+            vibe: "heal",
+            media: "movie"
+        };
+
+        // UI 交互切换逻辑
+        function selectOption(type, element) {
+            // 清除旧的激活状态
+            const activeClass = `active-${type}`;
+            const container = element.parentElement;
+            const buttons = container.querySelectorAll('button');
+            
+            buttons.forEach(btn => {
+                btn.classList.remove(activeClass, 'bg-[#E27043]', 'text-white', 'shadow-sm', 'shadow-[#E27043]/20');
+                btn.classList.add('bg-[#FCFAF7]', 'border', 'border-orange-100/50', 'text-stone-500');
+            });
+
+            // 激活当前点击
+            element.classList.add(activeClass, 'bg-[#E27043]', 'text-white');
+            element.classList.remove('bg-[#FCFAF7]', 'border', 'border-orange-100/50', 'text-stone-500');
+            if (type === 'cohort') {
+                element.classList.add('shadow-sm', 'shadow-[#E27043]/20');
+            }
+
+            // 更新数据
+            currentSelections[type] = element.getAttribute('data-value');
+        }
+
+        // 下饭内容数据库
+        const database = {
+            // 治愈系 (Heal)
+            heal: {
+                movie: { title: "《小森林》", emoji: "🌲", format: "MOVIE", desc: "远离喧嚣的乡野生活，随着四季流转亲手制作应季美食，极度宁静。", platform: "腾讯 / 爱奇艺", reason: "慢吞吞地品尝 [FOOD]，最需要这样一幅没有冲突、静谧而充满自然风味的长画卷。" },
+                show: { title: "《深夜食堂》", emoji: "🏮", format: "SERIES", desc: "午夜开始营业的小店，每一道简单家常菜背后，都有一个温热疲惫灵魂的故事。", platform: "B站 / Netflix", reason: "热气腾腾的 [FOOD] 与剧中的温情烟火气是天作之合，让孤独的用餐时间也变得无比治愈。" },
+                skit: { title: "《武林外传》高甜/温馨日常", emoji: "🥋", format: "SITCOM", desc: "同福客栈的柴米油盐和打打闹闹，是包容一切孤独与疲惫的温床。", platform: "Bilibili / 优酷", reason: "经典配乐响起的瞬间，[FOOD] 都有了熟悉的温度。闭着眼盲听台词都能让人抿嘴一笑。" },
+                short: { title: "李子柒 / 绵羊料理 经典特辑", emoji: "👩‍🍳", format: "SHORT", desc: "极具生活仪式感的美食博主，从农田到餐桌，治愈强迫症的精致剪辑与声效。", platform: "Bilibili / 抖音", reason: "看别人做饭的满足感，能让手里的 [FOOD] 尝起来比平时香甜、精致十倍。" }
+            },
+            // 搞笑大笑 (Laugh)
+            laugh: {
+                movie: { title: "《让子弹飞》", emoji: "🤠", format: "MOVIE", desc: "经典无需多言，全程高能、台词句句是梗，节奏快到飞起，绝对的下饭神作。", platform: "B站 / 腾讯", reason: "[FOOD] 还没嚼完，下一个神级名梗就来了！适合一边拍大腿一边大快朵颐。" },
+                show: { title: "《极限挑战》（第1-3季经典）", emoji: "🕶️", format: "SHOW", desc: "男人帮的斗智斗勇和无剧本极限拉扯，名场面高能频出，笑出腹肌。", platform: "Bilibili", reason: "看着节目里大家为了抢一口吃的兵荒马乱，你嘴里的 [FOOD] 顿时显得格外美味高贵。" },
+                skit: { title: "沈腾 / 赵本山 经典小品连播", emoji: "🎭", format: "SKIT", desc: "春晚经典名场面大串烧，节奏欢快、包袱密集，老少皆宜的解压神器。", platform: "Bilibili / YouTube", reason: "不需要双手操作，眼睛和耳朵被包袱喂饱。极其适合吃需要剥壳或用手抓的 [FOOD]！" },
+                short: { title: "「大漠叔叔」或搞笑赶海视频", emoji: "🦀", format: "SHORT", desc: "野性十足又沙雕搞笑的户外整活，画风质朴幽默，快乐无负担。", platform: "抖音 / 快手 / B站", reason: "轻松幽默的沙雕气质和 [FOOD] 的爽快感完美中和，极速榨干一整天的疲惫。" }
+            },
+            // 爽快动作 (Thrill)
+            thrill: {
+                movie: { title: "《子弹列车》", emoji: "🚄", format: "MOVIE", desc: "霓虹美学、昆汀风暴力、密闭列车上的各路杀手大混战，黑色幽默与爽感并存。", platform: "腾讯 / 优酷", reason: "快节奏的剪辑与动作戏，极其适合配重口味的 [FOOD]，肾上腺素随着辛辣感一同飙升！" },
+                show: { title: "《快乐向前冲》高能合集", emoji: "🏃", format: "SHOW", desc: "经典的素人闯关节目，各种匪夷所思的落水姿势，让人爆笑且欲罢不能。", platform: "Bilibili", reason: "关卡惊险刺激但毫无理解门槛，吃口 [FOOD] 看人落水一次，爽快利落，解压满分！" },
+                skit: { title: "德云社 经典相声「名场面」", emoji: "🎤", format: "SKIT", desc: "郭德纲、于谦经典相声集锦，现挂不断，思维敏捷，爽快互怼。", platform: "B站 / 喜马拉雅", reason: "密集的捧逗节奏，能自动帮你划分咀嚼频率，让吃 [FOOD] 的节奏变得欢快无比。" },
+                short: { title: "「注意看，这个男人叫小帅」电影解说", emoji: "🎙️", format: "SHORT", desc: "3分钟看完一部高分科幻/惊悚大片，浓缩精华，节奏快到不给你思考余地。", platform: "抖音 / 视频号", reason: "在 [FOOD] 凉掉之前，你已经看完了三部大片，是追求极简、高效率干饭人的究极选择。" }
+            },
+            // 脑洞悬疑 (Brain)
+            brain: {
+                movie: { title: "《彗星来的那一夜》", emoji: "☄️", format: "MOVIE", desc: "低成本科幻神作，密闭空间，平行时空交错，细节铺天盖地，越想越细思极恐。", platform: "爱奇艺 / 腾讯", reason: "烧脑的剧情非常适合一小口一小口地品尝 [FOOD]，让味蕾和大脑在悬疑中一同思考。" },
+                show: { title: "《明星大侦探》（前期经典案）", emoji: "🔍", format: "SHOW", desc: "烧脑与搞笑兼具的剧本杀鼻祖。剧情层层剥茧，反转不断。", platform: "芒果TV", reason: "跟着主线找凶手，手里的 [FOOD] 仿佛成了思考的助推剂。吃完一餐，案子刚好水落石出。" },
+                skit: { title: "世界奇妙物语 脑洞短片", emoji: "🌀", format: "SKIT", desc: "一集一个神级脑洞，短小精悍，反转连连，反乌托邦式的现代黑色寓言。", platform: "Bilibili", reason: "每个短片10-15分钟。刚好吃完 [FOOD]，正好迎来结尾细思极恐的高能反转。" },
+                short: { title: "「小约翰可汗」奇葩人物志", emoji: "通辽", format: "SHORT", desc: "通辽宇宙发起人，硬核讲述世界上各种奇葩硬核人物的魔幻人生，趣味无穷。", platform: "Bilibili", reason: "听硬核故事，吃硬核 [FOOD]。生动幽默的解说风格，让你的餐桌瞬间变成通辽分部！" }
+            }
+        };
+
+        // 匹配主逻辑
+        function generateMatch() {
+            const foodVal = document.getElementById('foodInput').value.trim() || "这顿饭";
+            const vibe = currentSelections.vibe;
+            const media = currentSelections.media;
+            const cohort = currentSelections.cohort;
+
+            // 获取对应的匹配库数据
+            const match = database[vibe][media];
+
+            // 智能语义处理（根据用户输入的食物调整佐餐理由的动态变化）
+            let customReason = match.reason.replace("[FOOD]", `<strong class="text-[#D35A33] font-semibold">“${foodVal}”</strong>`);
+            
+            // 针对用餐人数做微调
+            if (cohort === "2") {
+                customReason += " 此时此景，非常适合与你对面（或身边）的那位共同分享、吐槽和讨论。";
+            } else if (cohort === "3") {
+                customReason += " 聚会的热闹氛围，配上这个背景声音，完全不怕冷场，聚会气氛瞬间拉满！";
+            }
+
+            // 渲染数据
+            document.getElementById('resultTitle').innerHTML = match.title;
+            document.getElementById('resultEmoji').textContent = match.emoji;
+            document.getElementById('resultFormat').textContent = match.format;
+            document.getElementById('resultDesc').textContent = match.desc;
+            document.getElementById('resultPlatform').textContent = match.platform;
+            document.getElementById('resultReason').innerHTML = customReason;
+
+            // 动画优雅展示
+            const resultCard = document.getElementById('resultCard');
+            resultCard.classList.remove('hidden');
+            setTimeout(() => {
+                resultCard.classList.remove('scale-95', 'opacity-0');
+                resultCard.classList.add('scale-100', 'opacity-100');
+            }, 50);
+        }
+    </script>
+</body>
+</html>
